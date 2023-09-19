@@ -168,6 +168,14 @@ public:
 	 */
 	void inline clear();
 
+	void copyTo(T* out);
+
+	void copyTo(R* out, R (&convert)(const T&));
+
+	void copyFrom(T* inArr, uint16_t size);
+
+	void copyFrom(R* inArr, R (&convert)(const T&), uint16_t size);
+
 	#ifdef CIRCULAR_BUFFER_DEBUG
 	void inline debug(Print* out);
 	void inline debugFn(Print* out, void (*printFunction)(Print*, T));
