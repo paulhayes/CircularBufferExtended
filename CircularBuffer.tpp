@@ -123,6 +123,59 @@ void inline CircularBuffer<T,S,IT>::clear() {
 	count = 0;
 }
 
+#include <CircularBuffer.h>
+
+template<typename T, size_t S, typename IT>
+void inline CircularBuffer<T,S,IT>::copyTo(T* out) const {
+    const T* bufEnd = buffer + capacity;
+    const T* outEnd = out + count;
+    for (const T* t = head; t < bufEnd && out < outEnd; t++, out++) {
+        *out = *t;
+    }
+    for (const T* t = buffer; t <= tail && out < outEnd; t++, out++) {
+        *out = *t;
+    }
+}
+
+template<typename T, size_t S, typename IT>
+template<typename R>
+void inline CircularBuffer<T,S,IT>::copyTo(R* out, R (&convert)(const T&)) const {
+    const T* bufEnd = buffer + capacity;
+    const R* outEnd = out + count;
+    for (const T* t = head; t < bufEnd && out < outEnd; t++, out++) {
+        *out = convert(*t);
+    }
+    for (const T* t = buffer; t <= tail && out < outEnd; t++, out++) {
+        *out = convert(*t);
+    }
+}
+
+
+template<typename T, size_t S, typename IT>
+void inline CircularBuffer<T,S,IT>::copyFrom(T* inArr, uint16_t size) const {
+    const T* bufEnd = buffer + capacity;
+    const T* outEnd = inArr + size;
+    for (const T* t = head; t < bufEnd && inArr < outEnd; t++, inArr++) {
+        *t = *inArr;
+    }
+    for (const T* t = buffer; t <= tail && inArr < outEnd; t++, inArr++) {
+        *t = *inArr;
+    }
+}
+
+template<typename T, size_t S, typename IT>
+template<typename R>
+void inline CircularBuffer<T,S,IT>::copyFrom(R* inArr, R (&convert)(const T&), uint16_t size) const {
+    const T* bufEnd = buffer + capacity;
+    const R* outEnd = inArr + size;
+    for (const T* t = head; t < bufEnd && inArr < outEnd; t++, inArr++) {
+        *inArr = convert(*t);
+    }
+    for (const T* t = buffer; t <= tail && inArr < outEnd; t++, inArr++) {
+        *inArr = convert(*t);
+    }
+}
+
 #ifdef CIRCULAR_BUFFER_DEBUG
 #include <string.h>
 template<typename T, size_t S, typename IT>
